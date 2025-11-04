@@ -1,6 +1,10 @@
+const adminModel = require("../models/adminModel");
+
 
 const adminLogin =  async (req , res) => {
-    res.send("Admin Login");
+    const {email , password} = req.body;
+    console.log(req.body);
+    res.send("Login Successful");
 }
 
 module.exports = {
