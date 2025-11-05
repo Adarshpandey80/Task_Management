@@ -7,7 +7,7 @@ import AdminDashboard from "./admin/AdminDashboard"
 import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
 function App() {
- 
+
 
   return (
     <>
@@ -16,13 +16,11 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
         </Route>
+        <Route path="admindashboard" element={<AdminDashboard />}>
+          <Route path="createUser" element={<CreateUser/>} />
+          <Route path="assignTask" element={<AssignTask/>} />
+        </Route>
        </Routes>
-           
-           <Routes>
-               <Route path="admindashboard" element={<AdminDashboard />} />
-               <Route path="createUser" element={<CreateUser/>} />
-               <Route path="assignTask" element={<AssignTask/>} />
-           </Routes>
       </BrowserRouter>
     </>
   )

@@ -60,7 +60,7 @@
 /* Right Page Content */
 .content-area {
   flex: 1;
-  padding: 30px;
+  padding: 10px;
   background: #f8fafc;
   overflow-y: auto;
   animation: fadeIn 0.3s ease;
