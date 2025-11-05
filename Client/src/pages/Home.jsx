@@ -1,11 +1,16 @@
 import { useState } from "react";
 import "../css/Home.css";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
+ import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,20 +25,23 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   if(role === "Admin"){
     try {
-       if (role == "Admin") {
       const api = `${import.meta.env.VITE_BACKEND_URL}/admin/login`;
-      const response = await axios.post(api, {email,password});
-      console.log(response.data);
-    } else {
-      alert("Employee Login");
-    }
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-   
-    console.log({ email, password, role });
+      const response = await axios.post( api, { email, password, });
+      toast.success(response.data.msg);
 
+      localStorage.setItem("admin" , response.data.admin._id);
+      localStorage.setItem("adminemail" , response.data.admin.email);
+
+      navigate("/admindashboard");
+
+    } catch (error) {
+      toast.error(error.response.data.msg);
+    }
+   } else {
+    toast.error("Please select a valid role");
+   }
   };
 
   return (

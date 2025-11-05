@@ -1,0 +1,85 @@
+/* Updated User Form CSS with 50% Width & Better UI */
+.user-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #eef2f7;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.user-form-card {
+  width: 50%; /* 50% width as requested */
+  min-height: 480px; /* Taller form */
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease;
+  border: 1px solid #e4e7ec;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-form-card h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 28px;
+  color: #1d2939;
+  font-weight: 600;
+}
+
+.user-input-group {
+  margin-bottom: 20px;
+}
+
+.user-input-group label {
+  font-size: 15px;
+  color: #344054;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.user-input-group input,
+.user-input-group select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #f9fafb;
+  outline: none;
+  transition: 0.25s;
+}
+
+.user-input-group input:focus,
+.user-input-group select:focus {
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.user-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.user-submit-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
