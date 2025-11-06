@@ -25,10 +25,15 @@ const CreateUser = () => {
 
   const handlsubmit = async (e)=>{
         e.preventDefault();
-         const api = `${import.meta.env.VITE_API_URL}/admin/createuser`;
+        try {
+             const api = `${import.meta.env.VITE_BACKEND_URL}/admin/createuser`;
         const data = {name , email , role};
         const response = await axios.post(api ,data);
-         console.log(response.data)
+         toast.success(response.data.msg)
+        } catch (error) {
+              toast.error(response.data.msg)
+        }
+        
   }
   
    
