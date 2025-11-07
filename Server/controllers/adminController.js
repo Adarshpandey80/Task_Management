@@ -1,6 +1,7 @@
 const adminModel = require("../models/adminModel");
 const empModel = require("../models/empModel");
 const EmpPass = require("../utils/userPassword");
+const emptaskModel = require("../models/empTaskModel")
 const nodemailer = require('nodemailer');
 
 const adminLogin = async (req, res) => {
@@ -66,12 +67,42 @@ const createUser = async (req, res) => {
     }
 }
 
+const empDataList = async (req, res) => {
+    try {
+        const empdata = await empModel.find()
+        res.status(200).send(empdata)
+    } catch (error) {
+        console.log("error in emp data fatching", error)
+    }
 
+}
+
+const assignTask = async (req, res) => {
+    // const { title, description, duration, priority, empid } = req.body;
+
+try {
+    // const emptask = new emptaskModel({
+    //     title : title ,
+    //     description:description,
+    //     duration:duration,
+    //     priority:priority,
+    //     empid : empid
+    // })
+     const emptask = new emptaskModel(req.body)
+    await emptask.save()
+    res.status(200).send("assign task succesfully")
+} catch (error) {
+    console.log("error in assign task", error)
+}
+
+}
 
 
 
 module.exports = {
     adminLogin,
-    createUser
+    createUser,
+    empDataList,
+    assignTask
 
 };
