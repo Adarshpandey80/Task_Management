@@ -3,6 +3,9 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const adminRouter = require("./routers/adminRoute");
+const empRouter = require("./routers/empRoute")
+
+
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -11,6 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/admin", adminRouter);
+app.use("/employee" , empRouter)
 
 
 

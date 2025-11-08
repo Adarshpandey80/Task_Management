@@ -3,12 +3,13 @@ import "../css/Home.css";
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
  import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -22,6 +23,8 @@ const Home = () => {
       setRole(value);
     }
   };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,9 +43,25 @@ const Home = () => {
       toast.error(error.response.data.msg);
     }
    } else {
-    toast.error("Please select a valid role");
-   }
-  };
+  
+     try {
+ 
+      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/login`;
+      const response = await axios.post( api, { email, password, });
+      toast.success(response.data.msg);
+  
+       const id = response.data.employee._id
+  
+      navigate(`/empdashboard/${id}`);
+
+      
+     } catch (error) {
+        toast.error(error.response.data.msg);
+     }
+    
+   } 
+  
+  }
 
   return (
     <div className="login-container">
@@ -85,5 +104,6 @@ const Home = () => {
     </div>
   );
 }
+
 
 export default Home;

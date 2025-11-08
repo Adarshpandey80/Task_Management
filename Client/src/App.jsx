@@ -6,6 +6,8 @@ import Layout from "../Layout"
 import AdminDashboard from "./admin/AdminDashboard"
 import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
+import Empdashboard from "./employee/empdashboard"
+import Showtask from "./employee/Showtask"
 function App() {
 
 
@@ -16,9 +18,20 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
         </Route>
+      </Routes>
+
+        <Routes>
         <Route path="admindashboard" element={<AdminDashboard />}>
           <Route path="createUser" element={<CreateUser/>} />
           <Route path="assignTask" element={<AssignTask/>} />
+        </Route>
+        </Routes>
+
+
+       <Routes>
+        <Route path="empdashboard/:id" element={<Empdashboard/>}>
+        <Route path="showtask" element={<Showtask/>} />
+          
         </Route>
        </Routes>
       </BrowserRouter>
