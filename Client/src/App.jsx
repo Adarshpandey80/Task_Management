@@ -29,7 +29,8 @@ function App() {
 
 
        <Routes>
-        <Route path="empdashboard/:id" element={<Empdashboard/>}>
+        <Route path="/empdashboard/:id" element={<Empdashboard/>}>
+        <Route index element={<div>Welcome to your dashboard</div>} />
         <Route path="showtask" element={<Showtask/>} />
           
         </Route>

@@ -6,15 +6,15 @@ import { toast } from 'react-toastify'
 
 const Showtask = () => {
     const { id } = useParams();
+    const [tasks , setTasks ] = useState([]);
     console.log(id)
 
-    const Showtask = async (e) => {
-        e.preventDefault();
+    const Showtask = async () => {
 
         try {
             const api = `${import.meta.env.VITE_BACKEND_URL}/employee/showtask/${id}`;
             const response = await axios.get(api)
-            console.log(response.data)
+            setTasks(response.data)
         } catch (error) {
             console.log("error in task fatching" , error)
         }
@@ -24,11 +24,43 @@ const Showtask = () => {
     useEffect(()=>{
         Showtask();
     } , [])
-
+     
+    let sn =0 ;
+    const emptasks = tasks.map((key)=>{
+        sn++;
+          return (
+            <>
+            <tr>
+                <td>{sn}</td>
+                <td>{key.title}</td>
+                <td>{key.description}</td>
+                <td>{key.duration}</td>
+                <td>{key.priority}</td>
+            </tr>
+            </>
+          )
+    })
 
 
     return (
-        <div>Showtask</div>
+        <>
+           <table>
+            <thead>
+                    <tr>
+                        <th>sn</th>
+                        <th>tasktitle</th>
+                        <th>describtion</th>
+                        <th>duration</th>
+                        <th>priority</th>
+
+                    </tr>
+            </thead>
+            <tbody>
+                {emptasks}
+            </tbody>
+           </table>
+         
+        </>
     )
 }
 

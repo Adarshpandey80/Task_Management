@@ -1,4 +1,5 @@
 const empModel = require("../models/empModel")
+const empTask = require("../models/empTaskModel")
 
 
 
@@ -24,8 +25,12 @@ const emptask = async (req, res) => {
 
 const showTask = async ( req,res) =>{
     const {id} = req.params;
-    console.log(id);
-        res.send("okkkk")
+    try {
+        const task = await empTask.find({empid:id})
+        res.send(task)
+    } catch (error) {
+         console.log("error in fetch task data" , error)
+    }
 }
 
 
