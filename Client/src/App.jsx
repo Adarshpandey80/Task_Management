@@ -30,7 +30,7 @@ function App() {
 
        <Routes>
         <Route path="/empdashboard/:id" element={<Empdashboard/>}>
-        <Route index element={<div>Welcome to your dashboard</div>} />
+        <Route index element={<Showtask/>} />
         <Route path="showtask" element={<Showtask/>} />
           
         </Route>
