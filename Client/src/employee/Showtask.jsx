@@ -32,10 +32,6 @@ const Showtask = () => {
     setShowModal(true);
   };
 
- 
-
-
-  
 
   return (
     <div className="task-container">

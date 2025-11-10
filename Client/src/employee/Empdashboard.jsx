@@ -42,7 +42,7 @@ const Empdashboard = () => {
       {/* Main Content */}
       <main className={`emp-content ${isOpen ? "" : "full"}`}>
         <header className="emp-topbar">
-          <h1>Employee Dashboard</h1>
+          <h1>Welcome , {localStorage.getItem("empname")}</h1>
         </header>
 
         <div className="emp-body">

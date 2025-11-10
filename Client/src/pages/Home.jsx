@@ -51,6 +51,9 @@ const Home = () => {
       toast.success(response.data.msg);
   
        const id = response.data.employee._id
+       const name =  response.data.employee.name
+
+       localStorage.setItem("empname" , name);
   
       navigate(`/empdashboard/${id}`);
 
