@@ -5,7 +5,11 @@ const taskSchema= new mongoose.Schema({
     description:String,
      duration: Number,
     priority:String,
-    empid : String
+    empid : String,
+    status:String,
+    completionday:Number,
+    comment:String,    
+    tasksend: Boolean
 })
 
 module.exports = mongoose.model("emptask",taskSchema);

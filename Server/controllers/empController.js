@@ -34,8 +34,24 @@ const showTask = async ( req,res) =>{
 }
 
 
+const sendReport = async (req,res)=>{
+    try {
+         const {tid , status ,   completionday , comment} = req.body
+    console.log(req.body);
+     await empTask.findByIdAndUpdate(tid , {status: status
+        , completionday: completionday  , comment: comment})
+
+    res.status(201).send("report send sucssefully")
+    } catch (error) {
+         res.status(401).send("error in report sending")
+    }
+
+}
+
+
 
 module.exports = {
     emptask,
-    showTask
+    showTask,
+    sendReport
 }

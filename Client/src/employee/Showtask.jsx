@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../css/employee/showTask.css";
@@ -8,10 +8,12 @@ const Showtask = () => {
   const { id } = useParams();
   const [tasks, setTasks] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask , setSelectedTask]  = useState(null)
+  const [tid, setTid] = useState("");
+  const [input , setInput] = useState({});
 
 
-  
+
   const fetchTasks = async () => {
     try {
       const api = `${import.meta.env.VITE_BACKEND_URL}/employee/showtask/${id}`;
@@ -28,9 +30,34 @@ const Showtask = () => {
 
   // Open report modal
   const handleReportClick = (task) => {
-    setSelectedTask(task);
+    setSelectedTask(task)
+    setTid(task._id);
     setShowModal(true);
   };
+
+
+
+  const handlchange =(e)=>{
+       const { name , value} = e.target 
+       setInput((prev)=>({
+        ...prev , [name] : value 
+       }))
+  }
+  
+
+  const sendReport = async (e)=>{
+    e.preventDefault();
+     
+    try {
+       const api = `${import.meta.env.VITE_BACKEND_URL}/employee/sendreport`;
+       const response = await axios.post(api , {tid , ...input})
+       toast.success(response.data)
+     
+    } catch (error) {
+       console.log(error)
+    }
+
+  }
 
 
   return (
@@ -60,18 +87,16 @@ const Showtask = () => {
                   <td>{task.duration}</td>
                   <td>
                     <span
-                      className={`priority-badge ${
-                        task.priority?.toLowerCase() || "low"
-                      }`}
+                      className={`priority-badge ${task.priority?.toLowerCase() || "low"
+                        }`}
                     >
                       {task.priority}
                     </span>
                   </td>
                   <td>
                     <span
-                      className={`status-badge ${
-                        task.status?.toLowerCase().replace(" ", "-") || "pending"
-                      }`}
+                      className={`status-badge ${task.status?.toLowerCase().replace(" ", "-") || "pending"
+                        }`}
                     >
                       {task.status || "Pending"}
                     </span>
@@ -102,29 +127,34 @@ const Showtask = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Update Status: {selectedTask?.title}</h3>
-            <form  className="report-form">
+            <form className="report-form">
               <label>Status</label>
-              <select
-                name="status"
-               
-                required
-              >
+              <select name="status" required onChange={handlchange} >
                 <option value="">Select Status</option>
                 <option value="Not Started">Not Started</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
               </select>
 
+              <label>Duration</label>
+              <input
+                name="completionday"
+                placeholder=" Enter duration in digit "
+                rows="4"
+                onChange={handlchange}
+              ></input>
+
               <label>Message / Progress Note</label>
               <textarea
-                name="message"
-             
+                name="comment"
                 placeholder="Add progress details or remarks..."
                 rows="4"
+                onChange={handlchange}
               ></textarea>
 
               <div className="modal-actions">
-                <button type="submit" className="submit-report-btn">
+                <button type="submit" className="submit-report-btn"  onClick= {sendReport}>
+                 
                   Update Task
                 </button>
                 <button

@@ -1,25 +1,28 @@
+/* ====== TASK CONTAINER ====== */
 .task-container {
-  background: #f9fafb;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(145deg, #f9fafb, #f1f5f9);
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   animation: fadeIn 0.5s ease-in-out;
   min-height: 85vh;
 }
 
 .task-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 25px;
   text-align: center;
+  letter-spacing: 0.5px;
 }
 
+/* ====== TABLE ====== */
 .task-table-wrapper {
   overflow-x: auto;
-  border-radius: 12px;
-  background: white;
-  padding: 15px;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 20px;
 }
 
 .task-table {
@@ -30,7 +33,7 @@
 }
 
 .task-table thead {
-  background: #1e293b;
+  background: linear-gradient(90deg, #1e293b, #334155);
   color: white;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -38,7 +41,7 @@
 
 .task-table th,
 .task-table td {
-  padding: 12px 16px;
+  padding: 14px 18px;
   text-align: left;
 }
 
@@ -49,106 +52,37 @@
 .task-table tbody tr:hover {
   background: #f1f5f9;
   transform: scale(1.01);
+  cursor: pointer;
 }
 
-/* Priority badges */
+/* ====== PRIORITY BADGES ====== */
 .priority-badge {
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   color: white;
   font-size: 0.85rem;
   font-weight: 500;
   text-transform: capitalize;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .priority-badge.high {
-  background: #ef4444; /* red */
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
 }
 
 .priority-badge.medium {
-  background: #facc15; /* yellow */
+  background: linear-gradient(135deg, #facc15, #ca8a04);
   color: #1e293b;
 }
 
 .priority-badge.low {
-  background: #22c55e; /* green */
+  background: linear-gradient(135deg, #22c55e, #15803d);
 }
 
-/* Buttons */
-.report-btn {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.report-btn:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-/* Empty state */
-.no-task {
-  text-align: center;
-  font-style: italic;
-  color: #64748b;
-  padding: 20px 0;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .task-table th,
-  .task-table td {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .task-title {
-    font-size: 1.4rem;
-  }
-
-  .report-btn {
-    padding: 6px 10px;
-  }
-}
-
-/* Dropdown styling */
-.report-form select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background: #f9fafb;
-  font-size: 0.95rem;
-  transition: 0.3s ease;
-}
-
-.report-form select:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
-}
-
-/* Status Badge */
+/* ====== STATUS BADGE ====== */
 .status-badge {
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 6px 12px;
+  border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: capitalize;
@@ -175,112 +109,162 @@
   color: #374151;
 }
 
+/* ====== BUTTONS ====== */
+.report-btn {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
 
-/* Modal Overlay */
+.report-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* ====== EMPTY STATE ====== */
+.no-task {
+  text-align: center;
+  font-style: italic;
+  color: #64748b;
+  padding: 20px 0;
+}
+
+/* ====== MODAL ====== */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(30, 41, 59, 0.6);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(6px);
   z-index: 999;
-  backdrop-filter: blur(3px);
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Modal Box */
 .modal-content {
   background: #ffffff;
-  padding: 25px;
-  border-radius: 16px;
+  padding: 28px;
+  border-radius: 18px;
   width: 90%;
-  max-width: 500px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  max-width: 520px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   animation: slideUp 0.4s ease-out;
 }
 
 .modal-content h3 {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
 }
 
-/* Form */
+/* ====== FORM ====== */
 .report-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .report-form label {
-  font-weight: 500;
+  font-weight: 600;
   color: #334155;
+  font-size: 0.9rem;
 }
 
+/* Inputs & Selects */
+.report-form input,
+.report-form select,
 .report-form textarea {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  resize: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #f9fafb;
   font-size: 0.95rem;
   transition: 0.3s ease;
 }
 
+.report-form input:focus,
+.report-form select:focus,
 .report-form textarea:focus {
-  outline: none;
   border-color: #2563eb;
-  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+  background: #fff;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.25);
+  outline: none;
 }
 
+.report-form select {
+  cursor: pointer;
+}
+
+/* File Upload */
 .report-form input[type="file"] {
-  border: 1px solid #cbd5e1;
-  padding: 8px;
-  border-radius: 6px;
-  background: #f9fafb;
+  border: 1.5px dashed #94a3b8;
+  background: #f8fafc;
+  cursor: pointer;
 }
 
-/* Modal Buttons */
+/* ====== MODAL BUTTONS ====== */
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 12px;
+  margin-top: 18px;
 }
 
 .submit-report-btn {
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
   color: white;
-  padding: 8px 16px;
+  padding: 10px 18px;
   border-radius: 8px;
   border: none;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
 .submit-report-btn:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  transform: scale(1.03);
 }
 
 .cancel-btn {
-  background: #ef4444;
+  background: #f43f5e;
   color: white;
-  padding: 8px 14px;
+  padding: 10px 18px;
   border-radius: 8px;
   border: none;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
 .cancel-btn:hover {
-  background: #dc2626;
+  background: #e11d48;
+  transform: scale(1.03);
 }
 
-/* Animations */
+/* ====== ANIMATIONS ====== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(40px);
@@ -289,5 +273,22 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .task-title {
+    font-size: 1.4rem;
+  }
+
+  .task-table th,
+  .task-table td {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .modal-content {
+    padding: 20px;
   }
 }
