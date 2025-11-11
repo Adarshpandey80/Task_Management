@@ -98,11 +98,18 @@ try {
 }
 
 
+const seeReport = async (req,res) =>{
+    const report = await emptaskModel.find({status:"Completed"})
+    res.send(report);
+}
+
+
 
 module.exports = {
     adminLogin,
     createUser,
     empDataList,
-    assignTask
+    assignTask,
+    seeReport
 
 };

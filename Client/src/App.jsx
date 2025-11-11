@@ -8,6 +8,7 @@ import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
 import Empdashboard from "./employee/empdashboard"
 import Showtask from "./employee/Showtask"
+import Seereport from "./admin/Seereport"
 function App() {
 
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="admindashboard" element={<AdminDashboard />}>
           <Route path="createUser" element={<CreateUser/>} />
           <Route path="assignTask" element={<AssignTask/>} />
+          <Route path="seeReport" element={<Seereport/>} />
         </Route>
         </Routes>
 

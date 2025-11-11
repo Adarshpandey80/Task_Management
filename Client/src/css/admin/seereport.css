@@ -1,0 +1,136 @@
+/* seereport.css */
+
+/* Background & page setup */
+.report-container {
+  min-height: 100vh;
+  padding: 40px;
+  background: linear-gradient(135deg, #f0f4ff, #eaf6ff);
+  font-family: "Inter", "Poppins", sans-serif;
+  color: #2d2d2d;
+}
+
+/* Title styling */
+.report-container h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 35px;
+  letter-spacing: 0.5px;
+}
+
+/* Table wrapper */
+.table-wrapper {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 25px;
+  overflow-x: auto;
+}
+
+/* Table layout */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+/* Header */
+.report-table thead {
+  background: linear-gradient(90deg, #5c6bc0, #42a5f5);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.report-table th {
+  padding: 16px 20px;
+  text-align: left;
+  letter-spacing: 0.3px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+/* Body */
+.report-table tbody tr {
+  transition: background 0.3s ease, transform 0.2s ease;
+  border-bottom: 1px solid #e0e6f6;
+}
+
+.report-table tbody tr:nth-child(even) {
+  background: #f7faff;
+}
+
+.report-table tbody tr:hover {
+  background: #eaf3ff;
+  transform: scale(1.01);
+}
+
+.report-table td {
+  padding: 14px 20px;
+  font-size: 15px;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 8px 14px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* Status colors */
+.status-completed {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+}
+
+.status-progress {
+  background: linear-gradient(135deg, #ffa726, #ffb74d);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(255, 167, 38, 0.3);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #ef5350, #e57373);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(239, 83, 80, 0.3);
+}
+
+/* Scrollbar customization */
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #90a4ae;
+  border-radius: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #e0e6f6;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .report-container {
+    padding: 20px;
+  }
+
+  .report-table th,
+  .report-table td {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .report-container h1 {
+    font-size: 24px;
+  }
+}
