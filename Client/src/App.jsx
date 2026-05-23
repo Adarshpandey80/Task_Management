@@ -6,8 +6,12 @@ import Layout from "../Layout"
 import AdminDashboard from "./admin/AdminDashboard"
 import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
+import ViewUsers from "./admin/ViewUsers"
 import Empdashboard from "./employee/empdashboard"
 import Showtask from "./employee/Showtask"
+import CompletedTasks from "./employee/CompletedTasks"
+import PendingTasks from "./employee/PendingTasks"
+import Profile from "./employee/Profile"
 import Seereport from "./admin/Seereport"
 function App() {
 
@@ -26,6 +30,7 @@ function App() {
           <Route path="createUser" element={<CreateUser/>} />
           <Route path="assignTask" element={<AssignTask/>} />
           <Route path="seeReport" element={<Seereport/>} />
+          <Route path="viewUsers" element={<ViewUsers/>} />
         </Route>
         </Routes>
 
@@ -34,7 +39,9 @@ function App() {
         <Route path="/empdashboard/:id" element={<Empdashboard/>}>
         <Route index element={<Showtask/>} />
         <Route path="showtask" element={<Showtask/>} />
-          
+        <Route path="completedtasks" element={<CompletedTasks/>} />
+        <Route path="pendingtasks" element={<PendingTasks/>} />
+        <Route path="profile" element={<Profile/>} />
         </Route>
        </Routes>
       </BrowserRouter>

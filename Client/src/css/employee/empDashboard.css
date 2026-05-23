@@ -1,20 +1,19 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css");
-
+/* Premium Employee Dashboard */
 .emp-layout {
   display: flex;
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
-  background: #f9fafb;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
   transition: all 0.3s ease;
 }
 
 /* Sidebar */
 .emp-sidebar {
-  background: linear-gradient(180deg, #1e293b, #0f172a);
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
   color: white;
-  width: 250px;
+  width: 260px;
   transition: all 0.3s ease;
-  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -22,10 +21,29 @@
   bottom: 0;
   left: 0;
   z-index: 1000;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+}
+
+.emp-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.emp-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.emp-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.emp-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .emp-sidebar.closed {
-  width: 70px;
+  width: 80px;
 }
 
 /* Sidebar Header */
@@ -33,62 +51,94 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .emp-logo {
   font-size: 1.3rem;
-  font-weight: 600;
-  transition: opacity 0.3s ease;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  letter-spacing: -0.5px;
 }
 
 .emp-sidebar.closed .emp-logo {
   opacity: 0;
+  width: 0;
 }
 
-/* Toggle Button (inside sidebar) */
+/* Toggle Button */
 .emp-toggle-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  color: #fff;
+  color: white;
   font-size: 1.1rem;
   cursor: pointer;
-  border-radius: 6px;
-  padding: 6px 10px;
-  transition: 0.3s ease;
+  border-radius: 8px;
+  padding: 0.6rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .emp-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 /* Links */
 .emp-links {
   display: flex;
   flex-direction: column;
-  padding: 15px;
-  gap: 12px;
-  margin-top: 10px;
+  padding: 1rem;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex: 1;
 }
 
 .emp-links a {
-  color: #e2e8f0;
+  color: #d1d5db;
   text-decoration: none;
-  padding: 10px 15px;
+  padding: 0.85rem 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   font-size: 0.95rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.emp-links a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 4px 4px 0;
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
 }
 
 .emp-links a:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  transform: translateX(4px);
+  padding-left: 1.25rem;
+}
+
+.emp-links a:hover::before {
+  transform: scaleY(1);
+}
+
+.emp-sidebar.closed .emp-links a {
+  justify-content: center;
+  padding: 0.85rem;
 }
 
 .emp-sidebar.closed .emp-links a span {
@@ -98,44 +148,63 @@
 /* Content Area */
 .emp-content {
   flex: 1;
-  margin-left: 250px;
-  transition: margin-left 0.3s ease;
-  background: #f8fafc;
+  margin-left: 260px;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
   min-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.emp-content.full {
-  margin-left: 70px;
+.emp-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.emp-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.emp-content::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+.emp-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.5);
+}
+
+.emp-sidebar.closed ~ .emp-content {
+  margin-left: 80px;
 }
 
 /* Top Navbar */
 .emp-topbar {
-  background: #ffffff;
-  padding: 15px 25px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: white;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 900;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .emp-topbar h1 {
   font-size: 1.5rem;
-  color: #1e293b;
-  font-weight: 600;
+  color: #1f2937;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
 /* Main Body */
 .emp-body {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin: 25px;
-  animation: fadeIn 0.6s ease-in-out;
+  flex: 1;
+  padding: 2rem;
+  animation: fadeInUp 0.4s ease-in-out;
 }
 
-/* Animations */
-@keyframes fadeIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -148,6 +217,45 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .emp-sidebar {
+    width: 100%;
+    transform: translateX(-100%);
+    height: auto;
+    max-height: auto;
+    position: absolute;
+  }
+
+  .emp-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .emp-content {
+    margin-left: 0;
+  }
+
+  .emp-body {
+    padding: 1.5rem;
+  }
+
+  .emp-topbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .emp-topbar h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .emp-body {
+    padding: 1rem;
+  }
+
+  .emp-topbar h1 {
+    font-size: 1.1rem;
+  }
+}
+
   .emp-sidebar {
     position: fixed;
     transform: translateX(-100%);
