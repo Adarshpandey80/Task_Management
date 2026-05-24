@@ -42,6 +42,13 @@ const Empdashboard = () => {
 
       {/* Main Content */}
       <main className="emp-content">
+        {/* Floating Toggle Button */}
+        {!isOpen && (
+          <button className="emp-floating-toggle-btn" onClick={() => setIsOpen(true)}>
+            <Menu size={24} />
+          </button>
+        )}
+        
         <header className="emp-topbar">
           <h1>Welcome, {localStorage.getItem("empname")}</h1>
         </header>

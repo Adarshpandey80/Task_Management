@@ -74,6 +74,34 @@
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
+/* Floating Toggle Button */
+.floating-toggle-btn {
+  position: fixed;
+  top: 2rem;
+  left: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  z-index: 999;
+}
+
+.floating-toggle-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+}
+
+.floating-toggle-btn:active {
+  transform: scale(0.95);
+}
+
 /* Sidebar Links */
 .sidebar-links {
   display: flex;
@@ -208,6 +236,17 @@
   .sidebar-header {
     padding: 1.25rem;
   }
+
+  .floating-toggle-btn {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.65rem;
+  }
+
+  .floating-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -218,6 +257,17 @@
   .sidebar-links a {
     padding: 0.75rem 0.875rem;
     font-size: 0.9rem;
+  }
+
+  .floating-toggle-btn {
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.6rem;
+  }
+
+  .floating-toggle-btn svg {
+    width: 18px;
+    height: 18px;
   }
 }
 

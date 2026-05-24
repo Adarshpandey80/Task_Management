@@ -1,12 +1,12 @@
 
 
-import React, { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // modern icons
-import "../css/admin/layout.css";
+import React, { useState } from "react"
+import { Outlet, Link } from "react-router-dom"
+import { Menu, X } from "lucide-react"
+import "../css/admin/layout.css"
 
 const AdminDashboard = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true)
 
   return (
     <div className="layout-container">
@@ -30,10 +30,16 @@ const AdminDashboard = () => {
 
       {/* Main content */}
       <main className="content-area">
+        {/* Floating Toggle Button */}
+        {!isOpen && (
+          <button className="floating-toggle-btn" onClick={() => setIsOpen(true)}>
+            <Menu size={24} />
+          </button>
+        )}
         <Outlet />
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

@@ -4,10 +4,12 @@ import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Layout from "../Layout"
 import AdminDashboard from "./admin/AdminDashboard"
+import AdminHome from "./admin/AdminHome"
 import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
 import ViewUsers from "./admin/ViewUsers"
 import Empdashboard from "./employee/empdashboard"
+import EmployeeHome from "./employee/EmployeeHome"
 import Showtask from "./employee/Showtask"
 import CompletedTasks from "./employee/CompletedTasks"
 import PendingTasks from "./employee/PendingTasks"
@@ -27,6 +29,7 @@ function App() {
 
         <Routes>
         <Route path="admindashboard" element={<AdminDashboard />}>
+          <Route index element={<AdminHome/>} />
           <Route path="createUser" element={<CreateUser/>} />
           <Route path="assignTask" element={<AssignTask/>} />
           <Route path="seeReport" element={<Seereport/>} />
@@ -37,7 +40,7 @@ function App() {
 
        <Routes>
         <Route path="/empdashboard/:id" element={<Empdashboard/>}>
-        <Route index element={<Showtask/>} />
+        <Route index element={<EmployeeHome/>} />
         <Route path="showtask" element={<Showtask/>} />
         <Route path="completedtasks" element={<CompletedTasks/>} />
         <Route path="pendingtasks" element={<PendingTasks/>} />
