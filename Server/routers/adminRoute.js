@@ -6,8 +6,11 @@ const adminCortroller = require("../controllers/adminController");
 router.post("/login" ,adminCortroller.adminLogin);
 router.post("/createuser" , adminCortroller.createUser);
 router.get("/empdatalist" , adminCortroller.empDataList);
+router.get("/viewusers" , adminCortroller.empDataList); // Alias for empdatalist
 router.post("/assigntask" ,adminCortroller.assignTask )
 router.get("/seereport" , adminCortroller.seeReport);
+router.delete("/deleteuser/:id", adminCortroller.deleteUser);
+router.put("/updateuser/:id", adminCortroller.updateUser);
 
 
 

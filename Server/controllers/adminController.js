@@ -99,8 +99,42 @@ try {
 
 
 const seeReport = async (req,res) =>{
-    const report = await emptaskModel.find({status:"Completed"})
-    res.send(report);
+    try {
+        // Return ALL tasks, not just completed ones
+        const report = await emptaskModel.find()
+        res.send(report);
+    } catch (error) {
+        console.log("Error in see report:", error)
+        res.status(500).send({ msg: "Error fetching reports", error: error.message })
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params
+        const result = await empModel.findByIdAndDelete(id)
+        if (!result) {
+            return res.status(404).send({ msg: "User not found" })
+        }
+        res.status(200).send({ msg: "User deleted successfully", user: result })
+    } catch (error) {
+        console.log("Error in delete user:", error)
+        res.status(500).send({ msg: "Error deleting user", error: error.message })
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params
+        const result = await empModel.findByIdAndUpdate(id, req.body, { new: true })
+        if (!result) {
+            return res.status(404).send({ msg: "User not found" })
+        }
+        res.status(200).send({ msg: "User updated successfully", user: result })
+    } catch (error) {
+        console.log("Error in update user:", error)
+        res.status(500).send({ msg: "Error updating user", error: error.message })
+    }
 }
 
 
@@ -110,6 +144,7 @@ module.exports = {
     createUser,
     empDataList,
     assignTask,
-    seeReport
-
+    seeReport,
+    deleteUser,
+    updateUser
 };
