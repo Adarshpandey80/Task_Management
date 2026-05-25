@@ -68,9 +68,9 @@ const AdminHome = () => {
       let reportsRes
       try {
         reportsRes = await axios.get(reportsApi, { timeout: 5000 })
-        console.log('✅ Reports API Success:', reportsRes.status, reportsRes.data)
+        console.log(' Reports API Success:', reportsRes.status, reportsRes.data)
       } catch (reportError) {
-        console.error('❌ Reports API Failed:', reportError.response?.status, reportError.message)
+        console.error(' Reports API Failed:', reportError.response?.status, reportError.message)
         if (reportError.code === 'ECONNABORTED') {
           toast.error('Connection timeout on Reports API')
         } else if (reportError.response?.status === 404) {
@@ -106,7 +106,7 @@ const AdminHome = () => {
       // Set recent tasks (last 3)
       setRecentTasks(reports.slice(0, 3))
 
-      console.log('✅ Dashboard data loaded successfully:', {
+      console.log(' Dashboard data loaded successfully:', {
         totalUsers: users.length,
         totalTasks: totalTasks,
         completedTasks: completedCount,
@@ -116,7 +116,7 @@ const AdminHome = () => {
       
       toast.success('Dashboard data loaded successfully')
     } catch (error) {
-      console.error('❌ Error fetching dashboard stats:', {
+      console.error(' Error fetching dashboard stats:', {
         message: error.message,
         status: error.response?.status,
         data: error.response?.data,
@@ -344,7 +344,7 @@ const AdminHome = () => {
         </div>
 
         <div className="info-card">
-          <h3>💡 Quick Tips</h3>
+          <h3>Quick Tips</h3>
           <ul className="tips-list">
             <li>✓ Monitor task completion rate daily</li>
             <li>✓ Assign tasks fairly across the team</li>

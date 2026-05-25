@@ -9,6 +9,7 @@ import {
   Zap,
   Filter,
   RefreshCw,
+  Edit,
 } from 'lucide-react'
 import { toast } from 'react-toastify'
 import '../css/admin/updateTaskStatus.css'
@@ -298,6 +299,7 @@ const UpdateTaskStatus = () => {
                       onClick={() => handleEditClick(task)}
                       title="Update task status"
                     >
+                      <Edit size={16} />
                       Edit
                     </button>
                   </td>
