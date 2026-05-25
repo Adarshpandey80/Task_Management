@@ -8,6 +8,8 @@ router.post("/createuser" , adminCortroller.createUser);
 router.get("/empdatalist" , adminCortroller.empDataList);
 router.get("/viewusers" , adminCortroller.empDataList); // Alias for empdatalist
 router.post("/assigntask" ,adminCortroller.assignTask )
+router.get("/alltasks", adminCortroller.getAllTasks);
+router.put("/updatetaskstatus/:id", adminCortroller.updateTaskStatus);
 router.get("/seereport" , adminCortroller.seeReport);
 router.delete("/deleteuser/:id", adminCortroller.deleteUser);
 router.put("/updateuser/:id", adminCortroller.updateUser);

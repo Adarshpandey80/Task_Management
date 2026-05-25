@@ -8,6 +8,7 @@ import AdminHome from "./admin/AdminHome"
 import CreateUser from "./admin/CreateUser"
 import AssignTask from "./admin/AssignTask"
 import ViewUsers from "./admin/ViewUsers"
+import UpdateTaskStatus from "./admin/UpdateTaskStatus"
 import Empdashboard from "./employee/empdashboard"
 import EmployeeHome from "./employee/EmployeeHome"
 import Showtask from "./employee/Showtask"
@@ -34,6 +35,7 @@ function App() {
           <Route path="assignTask" element={<AssignTask/>} />
           <Route path="seeReport" element={<Seereport/>} />
           <Route path="viewUsers" element={<ViewUsers/>} />
+          <Route path="updateTaskStatus" element={<UpdateTaskStatus/>} />
         </Route>
         </Routes>
 

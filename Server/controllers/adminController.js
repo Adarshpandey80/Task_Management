@@ -97,6 +97,51 @@ try {
 
 }
 
+// Get all tasks
+const getAllTasks = async (req, res) => {
+    try {
+        const tasks = await emptaskModel.find()
+        if (!tasks) {
+            return res.status(404).send({ msg: "No tasks found" })
+        }
+        res.status(200).send(tasks)
+    } catch (error) {
+        console.log("Error in get all tasks:", error)
+        res.status(500).send({ msg: "Error fetching tasks", error: error.message })
+    }
+}
+
+// Update task status
+const updateTaskStatus = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { status } = req.body
+
+        if (!status) {
+            return res.status(400).send({ msg: "Status is required" })
+        }
+
+        const validStatuses = ['Pending', 'In Progress', 'Completed', 'On Hold']
+        if (!validStatuses.includes(status)) {
+            return res.status(400).send({ msg: "Invalid status value" })
+        }
+
+        const task = await emptaskModel.findByIdAndUpdate(
+            id,
+            { status: status },
+            { new: true }
+        )
+
+        if (!task) {
+            return res.status(404).send({ msg: "Task not found" })
+        }
+
+        res.status(200).send({ msg: "Task status updated successfully", task: task })
+    } catch (error) {
+        console.log("Error in update task status:", error)
+        res.status(500).send({ msg: "Error updating task status", error: error.message })
+    }
+}
 
 const seeReport = async (req,res) =>{
     try {
@@ -144,6 +189,8 @@ module.exports = {
     createUser,
     empDataList,
     assignTask,
+    getAllTasks,
+    updateTaskStatus,
     seeReport,
     deleteUser,
     updateUser
