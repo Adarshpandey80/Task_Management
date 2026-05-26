@@ -110,6 +110,45 @@ const getUnreadCount = async (req, res) => {
     }
 }
 
+// Employee reply to admin notification
+const replyToNotification = async (req, res) => {
+    try {
+        const { notificationId } = req.params
+        const { message, empName, empEmail } = req.body
+
+        if (!message || message.trim() === "") {
+            return res.status(400).send({ msg: "Reply message is required" })
+        }
+
+        const notification = await notificationModel.findByIdAndUpdate(
+            notificationId,
+            {
+                $push: {
+                    replies: {
+                        sender: 'employee',
+                        message: message,
+                        senderName: empName,
+                        sentAt: new Date()
+                    }
+                }
+            },
+            { new: true }
+        )
+
+        if (!notification) {
+            return res.status(404).send({ msg: "Notification not found" })
+        }
+
+        res.status(200).send({ 
+            msg: "Reply sent successfully", 
+            notification: notification 
+        })
+    } catch (error) {
+        console.log("Error in reply to notification:", error)
+        res.status(500).send({ msg: "Error sending reply", error: error.message })
+    }
+}
+
 
 module.exports = {
     emptask,
@@ -117,5 +156,6 @@ module.exports = {
     sendReport,
     getNotifications,
     markNotificationAsRead,
-    getUnreadCount
+    getUnreadCount,
+    replyToNotification
 }

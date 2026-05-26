@@ -59,10 +59,35 @@ function Seereport() {
   // Fetch report details
   const handleViewDetails = async (report) => {
     try {
-      const api = `${import.meta.env.VITE_BACKEND_URL}/admin/reportdetail/${report._id}`;
-      const response = await axios.get(api);
-      setSelectedReport(report);
-      setReportDetails(response.data);
+      const detailApi = `${import.meta.env.VITE_BACKEND_URL}/admin/reportdetail/${report._id}`;
+      const notificationApi = `${import.meta.env.VITE_BACKEND_URL}/admin/tasknotification/${report._id}`;
+      
+      const [detailResponse, notificationResponse] = await Promise.all([
+        axios.get(detailApi),
+        axios.get(notificationApi)
+      ]);
+
+      // Get the full report details with admin reply
+      const fullReport = detailResponse.data?.report || report;
+      
+      // Merge all data together
+      const mergedReport = {
+        ...report,
+        ...fullReport,
+        adminReply: fullReport.adminReply || report.adminReply
+      };
+
+      // If there's a notification with conversation thread, add it
+      if (notificationResponse.data && notificationResponse.data._id) {
+        mergedReport.conversationThread = {
+          initialMessage: notificationResponse.data.message,
+          replies: notificationResponse.data.replies || [],
+          notificationId: notificationResponse.data._id
+        };
+      }
+
+      setSelectedReport(mergedReport);
+      setReportDetails(detailResponse.data);
       setReplyMessage("");
       setShowModal(true);
     } catch (error) {
@@ -83,7 +108,7 @@ function Seereport() {
       const api = `${import.meta.env.VITE_BACKEND_URL}/admin/replyreport/${selectedReport._id}`;
       const response = await axios.post(api, { message: replyMessage });
       
-      toast.success("Reply sent to employee successfully");
+      toast.success(`Reply sent to ${reportDetails?.report?.empName}! Notification created.`);
       setReplyMessage("");
       
       // Update local state
@@ -221,7 +246,7 @@ function Seereport() {
               <div className="report-card-header">
                 <div className="employee-info">
                   <h3>{item.empName || 'Unknown Employee'}</h3>
-                  <p>{item.empEmail || item.empid}</p>
+                  <p className="emp-email">{item.empEmail || item.empid}</p>
                 </div>
                 <span
                   className={`status-badge ${
@@ -242,24 +267,9 @@ function Seereport() {
                   <p className="task-title">{item.title || 'N/A'}</p>
                 </div>
                 <div className="report-field">
-                  <label>Employee Message:</label>
-                  <p className="message">{item.comment}</p>
+                  <label>Employee's Message:</label>
+                  <p className="message">{item.comment || 'No message provided'}</p>
                 </div>
-                <div className="report-meta">
-                  <span className="meta-item">
-                    <strong>Days Taken:</strong> {item.completionday || 'N/A'}
-                  </span>
-                  <span className="meta-item">
-                    <strong>Reported:</strong> {item.reportSentAt ? new Date(item.reportSentAt).toLocaleDateString() : 'N/A'}
-                  </span>
-                </div>
-
-                {item.adminReply && (
-                  <div className="admin-reply-preview">
-                    <MessageCircle size={16} />
-                    <span>You replied to this report</span>
-                  </div>
-                )}
               </div>
 
               <div className="report-card-footer">
@@ -286,32 +296,28 @@ function Seereport() {
             </div>
 
             <div className="modal-body">
-              {/* Employee Info */}
-              <div className="detail-section">
-                <h3>Employee Information</h3>
+              {/* Employee Info - Prominent */}
+              <div className="detail-section employee-section">
+                <h3>Employee Details</h3>
                 <div className="detail-row">
                   <span className="label">Name:</span>
-                  <span className="value">{selectedReport.empName || 'N/A'}</span>
+                  <span className="value emp-name">{selectedReport.empName || 'N/A'}</span>
                 </div>
                 <div className="detail-row">
                   <span className="label">Email:</span>
-                  <span className="value">{selectedReport.empEmail || 'N/A'}</span>
+                  <span className="value emp-email">{selectedReport.empEmail || 'N/A'}</span>
                 </div>
               </div>
 
-              {/* Task Info */}
-              <div className="detail-section">
-                <h3>Task Information</h3>
+              {/* Task & Employee's Message */}
+              <div className="detail-section message-section">
+                <h3>Task & Progress Report</h3>
                 <div className="detail-row">
-                  <span className="label">Title:</span>
-                  <span className="value">{selectedReport.title}</span>
+                  <span className="label">Task Title:</span>
+                  <span className="value task-title">{selectedReport.title}</span>
                 </div>
                 <div className="detail-row">
-                  <span className="label">Priority:</span>
-                  <span className="value">{selectedReport.priority}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="label">Status:</span>
+                  <span className="label">Task Status:</span>
                   <span
                     className="status-badge"
                     style={{
@@ -322,29 +328,46 @@ function Seereport() {
                     {selectedReport.status}
                   </span>
                 </div>
-              </div>
-
-              {/* Employee Message */}
-              <div className="detail-section">
-                <h3>Employee's Progress Report</h3>
-                <div className="message-box">
-                  <p>{selectedReport.comment}</p>
-                  <span className="message-meta">
-                    Completion Days: {selectedReport.completionday} | Reported: {new Date(selectedReport.reportSentAt).toLocaleString()}
-                  </span>
+                <div className="detail-row full-width">
+                  <span className="label">Employee's Progress Report:</span>
+                  <p className="message-content">{selectedReport.comment}</p>
                 </div>
               </div>
 
-              {/* Admin Reply */}
-              {selectedReport.adminReply && (
+              {/* Admin Reply & Conversation */}
+              {selectedReport.conversationThread && selectedReport.conversationThread.initialMessage && (
                 <div className="detail-section admin-reply-section">
-                  <h3>Your Reply to Employee</h3>
-                  <div className="admin-message-box">
-                    <p>{selectedReport.adminReply.message}</p>
-                    <span className="message-meta">
-                      Sent: {new Date(selectedReport.adminReply.sentAt).toLocaleString()}
-                    </span>
+                  <h3>Conversation Thread</h3>
+                  
+                  {/* Admin Initial Message */}
+                  <div className="admin-conversation-message">
+                    <div className="conv-message-sender">You (Admin)</div>
+                    <div className="conv-message-box">
+                      <p>{selectedReport.conversationThread.initialMessage}</p>
+                    </div>
                   </div>
+
+                  {/* All Replies (Both Admin and Employee) */}
+                  {selectedReport.conversationThread.replies && selectedReport.conversationThread.replies.length > 0 && (
+                    <>
+                      {selectedReport.conversationThread.replies.map((reply, index) => (
+                        <div 
+                          key={index} 
+                          className={`${reply.sender === 'admin' ? 'admin-conversation-message' : 'emp-conversation-message'}`}
+                        >
+                          <div className="conv-message-sender">
+                            {reply.sender === 'admin' ? 'You (Admin)' : reply.senderName || 'Employee'}
+                          </div>
+                          <div className="conv-message-box">
+                            <p>{reply.message}</p>
+                            <span className="conv-message-time">
+                              {new Date(reply.sentAt).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
               )}
 

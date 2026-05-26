@@ -234,24 +234,47 @@ const replyToReport = async (req, res) => {
             return res.status(404).send({ msg: "Task not found" })
         }
 
-        // Create notification for employee
-        const notification = new notificationModel({
-            empid: task.empid,
-            empName: task.empName,
-            empEmail: task.empEmail,
-            taskId: task._id,
-            taskTitle: task.title,
-            notificationType: 'ADMIN_REPLY',
-            title: `Admin replied on: ${task.title}`,
-            message: message,
-            isRead: false,
-            relatedData: {
-                adminMessage: message,
-                taskStatus: task.status
-            }
-        })
+        // Check if notification already exists for this task
+        let notification = await notificationModel.findOne({ taskId: taskId })
 
-        await notification.save()
+        if (notification) {
+            // Notification exists - add admin's reply to replies array
+            notification = await notificationModel.findByIdAndUpdate(
+                notification._id,
+                {
+                    $push: {
+                        replies: {
+                            sender: 'admin',
+                            message: message,
+                            senderName: 'Admin',
+                            sentAt: new Date()
+                        }
+                    },
+                    // Update the main message to the latest admin message
+                    message: message,
+                    isRead: false
+                },
+                { new: true }
+            )
+        } else {
+            // No notification exists - create a new one with the initial admin message
+            notification = new notificationModel({
+                empid: task.empid,
+                empName: task.empName,
+                empEmail: task.empEmail,
+                taskId: task._id,
+                taskTitle: task.title,
+                notificationType: 'ADMIN_REPLY',
+                title: `Admin replied on: ${task.title}`,
+                message: message,
+                isRead: false,
+                relatedData: {
+                    adminMessage: message,
+                    taskStatus: task.status
+                }
+            })
+            await notification.save()
+        }
 
         res.status(200).send({
             msg: "Reply sent successfully",
@@ -264,6 +287,24 @@ const replyToReport = async (req, res) => {
     }
 }
 
+// Get notification by task ID (to see employee replies)
+const getTaskNotification = async (req, res) => {
+    try {
+        const { taskId } = req.params
+        
+        const notification = await notificationModel.findOne({ taskId: taskId })
+
+        if (!notification) {
+            return res.status(200).send({ msg: "No notification found", notification: null })
+        }
+
+        res.status(200).send(notification)
+    } catch (error) {
+        console.log("Error in get task notification:", error)
+        res.status(500).send({ msg: "Error fetching notification", error: error.message })
+    }
+}
+
 module.exports = {
     adminLogin,
     createUser,
@@ -273,6 +314,7 @@ module.exports = {
     updateTaskStatus,
     getReportDetail,
     replyToReport,
+    getTaskNotification,
     seeReport,
     deleteUser,
     updateUser

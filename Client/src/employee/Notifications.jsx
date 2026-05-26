@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Bell, AlertCircle, Loader, MessageCircle, CheckCircle, Clock } from 'lucide-react'
+import { Bell, AlertCircle, Loader, MessageCircle, CheckCircle, Clock, RefreshCw, Send } from 'lucide-react'
 import { toast } from 'react-toastify'
 import '../css/employee/notifications.css'
 
 const Notifications = () => {
-  const { id } = JSON.parse(localStorage.getItem('empdata') || '{}')
+  const empid = localStorage.getItem('empid')
+  const empName = localStorage.getItem('empname') || 'Employee'
+  
   const [notifications, setNotifications] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [unreadCount, setUnreadCount] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const [selectedNotification, setSelectedNotification] = useState(null)
+  const [replyMessage, setReplyMessage] = useState('')
+  const [isReplying, setIsReplying] = useState(false)
 
   useEffect(() => {
-    if (id) {
+    if (empid) {
       fetchNotifications()
       fetchUnreadCount()
       // Refresh notifications every 30 seconds
@@ -23,11 +28,11 @@ const Notifications = () => {
       }, 30000)
       return () => clearInterval(interval)
     }
-  }, [id])
+  }, [empid])
 
   const fetchNotifications = async () => {
     try {
-      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/notifications/${id}`
+      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/notifications/${empid}`
       const response = await axios.get(api)
       setNotifications(response.data || [])
     } catch (error) {
@@ -37,11 +42,23 @@ const Notifications = () => {
 
   const fetchUnreadCount = async () => {
     try {
-      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/unreadcount/${id}`
+      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/unreadcount/${empid}`
       const response = await axios.get(api)
       setUnreadCount(response.data.unreadCount || 0)
     } catch (error) {
       console.error('Error fetching unread count:', error)
+    }
+  }
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    try {
+      await Promise.all([fetchNotifications(), fetchUnreadCount()])
+      toast.success('Notifications refreshed')
+    } catch (error) {
+      toast.error('Failed to refresh notifications')
+    } finally {
+      setIsRefreshing(false)
     }
   }
 
@@ -64,8 +81,44 @@ const Notifications = () => {
   const handleNotificationClick = (notification) => {
     setSelectedNotification(notification)
     setShowModal(true)
+    setReplyMessage('')
     if (!notification.isRead) {
       handleMarkAsRead(notification._id)
+    }
+  }
+
+  const handleSendReply = async () => {
+    if (!replyMessage.trim()) {
+      toast.error('Reply message cannot be empty')
+      return
+    }
+
+    setIsReplying(true)
+    try {
+      const api = `${import.meta.env.VITE_BACKEND_URL}/employee/replytonotification/${selectedNotification._id}`
+      const response = await axios.post(api, {
+        message: replyMessage,
+        empName: empName
+      })
+
+      toast.success('Reply sent to admin successfully!')
+      setReplyMessage('')
+
+      // Update the selected notification with the new reply
+      const updatedNotification = response.data.notification
+      setSelectedNotification(updatedNotification)
+
+      // Update the notifications list
+      setNotifications(
+        notifications.map((notif) =>
+          notif._id === selectedNotification._id ? updatedNotification : notif
+        )
+      )
+    } catch (error) {
+      console.error('Error sending reply:', error)
+      toast.error('Failed to send reply')
+    } finally {
+      setIsReplying(false)
     }
   }
 
@@ -100,12 +153,23 @@ const Notifications = () => {
           <h2>Notifications</h2>
           <p>Stay updated with admin messages and task updates</p>
         </div>
-        {unreadCount > 0 && (
-          <div className="unread-badge">
-            <span>{unreadCount}</span>
-            <p>Unread</p>
-          </div>
-        )}
+        <div className="header-actions">
+          <button
+            className="btn-refresh"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            title="Refresh notifications"
+          >
+            <RefreshCw size={18} className={isRefreshing ? 'spinner' : ''} />
+            <span>{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+          </button>
+          {unreadCount > 0 && (
+            <div className="unread-badge">
+              <span>{unreadCount}</span>
+              <p>Unread</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {isLoading ? (
@@ -130,7 +194,13 @@ const Notifications = () => {
                   <h3>{notification.title}</h3>
                   {!notification.isRead && <span className="unread-dot"></span>}
                 </div>
-                <p className="notification-message">{notification.message}</p>
+                
+                {/* Simple Message Indicator */}
+                <div className="notification-message-indicator">
+                  <MessageCircle size={16} />
+                  <span>Admin Message</span>
+                </div>
+                
                 <div className="notification-meta">
                   <span className="notification-time">
                     {getTimeAgo(notification.createdAt)}
@@ -159,7 +229,10 @@ const Notifications = () => {
               <div className="modal-icon">
                 {getNotificationIcon(selectedNotification.notificationType)}
               </div>
-              <h2>{selectedNotification.title}</h2>
+              <div className="modal-header-content">
+                <h2>{selectedNotification.title}</h2>
+                <p className="modal-subtitle">Task Communication & Updates</p>
+              </div>
               <button
                 className="modal-close"
                 onClick={() => setShowModal(false)}
@@ -169,47 +242,92 @@ const Notifications = () => {
             </div>
 
             <div className="modal-body">
-              <div className="notification-detail">
-                <label>Task:</label>
-                <p className="task-title">{selectedNotification.taskTitle}</p>
-              </div>
-
-              <div className="notification-detail">
-                <label>Message from Admin:</label>
-                <div className="message-box">
-                  <p>{selectedNotification.message}</p>
-                  <span className="message-time">
-                    {new Date(selectedNotification.createdAt).toLocaleString()}
-                  </span>
+              {/* Task Information Section */}
+              <div className="detail-section task-section">
+                <h3>Task Information</h3>
+                <div className="detail-row">
+                  <span className="label">Task Title:</span>
+                  <span className="value task-title">{selectedNotification.taskTitle}</span>
                 </div>
               </div>
 
-              {selectedNotification.relatedData?.taskStatus && (
-                <div className="notification-detail">
-                  <label>Task Status:</label>
-                  <span
-                    className="status-badge"
-                    style={{
-                      backgroundColor:
-                        selectedNotification.relatedData.taskStatus === 'Completed'
-                          ? '#10b981'
-                          : selectedNotification.relatedData.taskStatus === 'In Progress'
-                          ? '#f59e0b'
-                          : '#ef4444',
-                    }}
-                  >
-                    {selectedNotification.relatedData.taskStatus}
-                  </span>
+              {/* Conversation Thread - Prominent */}
+              <div className="detail-section conversation-section">
+                <h3>Message Thread</h3>
+                <div className="conversation-thread">
+                  {/* Admin Initial Message */}
+                  <div className="message admin-message">
+                    <div className="message-sender">💬 Admin Message</div>
+                    <div className="message-content">
+                      <p>{selectedNotification.message || 'No message content'}</p>
+                      <span className="message-timestamp">
+                        {new Date(selectedNotification.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Employee and Admin Replies */}
+                  {selectedNotification.replies && selectedNotification.replies.length > 0 && (
+                    <>
+                      {selectedNotification.replies.map((reply, index) => (
+                        <div
+                          key={index}
+                          className={`message ${reply.sender === 'admin' ? 'admin-message' : 'employee-message'}`}
+                        >
+                          <div className="message-sender">
+                            {reply.sender === 'admin' ? '💬 Admin Reply' : '👤 Your Reply'}
+                          </div>
+                          <div className="message-content">
+                            <p>{reply.message}</p>
+                            <span className="message-timestamp">
+                              {new Date(reply.sentAt).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
+
+              {/* Reply Section */}
+              <div className="detail-section reply-section">
+                <h3>Send Your Reply</h3>
+                <textarea
+                  value={replyMessage}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                  placeholder="Type your reply to admin..."
+                  className="reply-textarea"
+                  rows="3"
+                  disabled={isReplying}
+                />
+              </div>
             </div>
 
             <div className="modal-footer">
               <button
                 className="btn-close"
                 onClick={() => setShowModal(false)}
+                disabled={isReplying}
               >
                 Close
+              </button>
+              <button
+                className="btn-send-reply"
+                onClick={handleSendReply}
+                disabled={isReplying || !replyMessage.trim()}
+              >
+                {isReplying ? (
+                  <>
+                    <Loader size={16} className="spinner" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send size={16} />
+                    Send Reply
+                  </>
+                )}
               </button>
             </div>
           </div>

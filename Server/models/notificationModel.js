@@ -19,6 +19,16 @@ const notificationSchema = new mongoose.Schema({
         taskStatus: String,
         previousStatus: String
     },
+    replies: [{
+        sender: {
+            type: String,
+            enum: ['admin', 'employee'],
+            required: true
+        },
+        message: String,
+        senderName: String,
+        sentAt: { type: Date, default: Date.now }
+    }],
     createdAt: { type: Date, default: Date.now },
     readAt: { type: Date, default: null }
 }, { timestamps: true });
