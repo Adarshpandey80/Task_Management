@@ -15,6 +15,7 @@ import Showtask from "./employee/Showtask"
 import CompletedTasks from "./employee/CompletedTasks"
 import PendingTasks from "./employee/PendingTasks"
 import Profile from "./employee/Profile"
+import Notifications from "./employee/Notifications"
 import Seereport from "./admin/Seereport"
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="showtask" element={<Showtask/>} />
         <Route path="completedtasks" element={<CompletedTasks/>} />
         <Route path="pendingtasks" element={<PendingTasks/>} />
+        <Route path="notifications" element={<Notifications/>} />
         <Route path="profile" element={<Profile/>} />
         </Route>
        </Routes>

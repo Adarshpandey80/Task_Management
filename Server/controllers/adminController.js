@@ -2,6 +2,7 @@ const adminModel = require("../models/adminModel");
 const empModel = require("../models/empModel");
 const EmpPass = require("../utils/userPassword");
 const emptaskModel = require("../models/empTaskModel")
+const notificationModel = require("../models/notificationModel");
 const nodemailer = require('nodemailer');
 
 const adminLogin = async (req, res) => {
@@ -182,7 +183,86 @@ const updateUser = async (req, res) => {
     }
 }
 
+// Get report details with employee information
+const getReportDetail = async (req, res) => {
+    try {
+        const { id } = req.params
+        const report = await emptaskModel.findById(id)
+        
+        if (!report) {
+            return res.status(404).send({ msg: "Report not found" })
+        }
 
+        // Get employee details
+        const employee = await empModel.findById(report.empid)
+        
+        res.status(200).send({
+            msg: "Report details fetched",
+            report: report,
+            employee: employee
+        })
+    } catch (error) {
+        console.log("Error in get report detail:", error)
+        res.status(500).send({ msg: "Error fetching report details", error: error.message })
+    }
+}
+
+// Admin reply to employee report
+const replyToReport = async (req, res) => {
+    try {
+        const { taskId } = req.params
+        const { message } = req.body
+
+        if (!message || message.trim() === "") {
+            return res.status(400).send({ msg: "Reply message is required" })
+        }
+
+        // Update task with admin reply
+        const task = await emptaskModel.findByIdAndUpdate(
+            taskId,
+            {
+                adminReply: {
+                    message: message,
+                    sentAt: new Date(),
+                    isRead: false
+                }
+            },
+            { new: true }
+        )
+
+        if (!task) {
+            return res.status(404).send({ msg: "Task not found" })
+        }
+
+        // Create notification for employee
+        const notification = new notificationModel({
+            empid: task.empid,
+            empName: task.empName,
+            empEmail: task.empEmail,
+            taskId: task._id,
+            taskTitle: task.title,
+            notificationType: 'ADMIN_REPLY',
+            title: `Admin replied on: ${task.title}`,
+            message: message,
+            isRead: false,
+            relatedData: {
+                adminMessage: message,
+                taskStatus: task.status
+            }
+        })
+
+        await notification.save()
+
+        res.status(200).send({
+            msg: "Reply sent successfully",
+            task: task,
+            notification: notification
+        })
+    } catch (error) {
+        console.log("Error in reply to report:", error)
+        res.status(500).send({ msg: "Error sending reply", error: error.message })
+    }
+}
 
 module.exports = {
     adminLogin,
@@ -191,6 +271,8 @@ module.exports = {
     assignTask,
     getAllTasks,
     updateTaskStatus,
+    getReportDetail,
+    replyToReport,
     seeReport,
     deleteUser,
     updateUser

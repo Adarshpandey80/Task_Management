@@ -11,6 +11,8 @@ router.post("/assigntask" ,adminCortroller.assignTask )
 router.get("/alltasks", adminCortroller.getAllTasks);
 router.put("/updatetaskstatus/:id", adminCortroller.updateTaskStatus);
 router.get("/seereport" , adminCortroller.seeReport);
+router.get("/reportdetail/:id", adminCortroller.getReportDetail);
+router.post("/replyreport/:taskId", adminCortroller.replyToReport);
 router.delete("/deleteuser/:id", adminCortroller.deleteUser);
 router.put("/updateuser/:id", adminCortroller.updateUser);
 

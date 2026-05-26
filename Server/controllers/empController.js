@@ -1,5 +1,6 @@
 const empModel = require("../models/empModel")
 const empTask = require("../models/empTaskModel")
+const notificationModel = require("../models/notificationModel")
 
 
 
@@ -36,22 +37,85 @@ const showTask = async ( req,res) =>{
 
 const sendReport = async (req,res)=>{
     try {
-         const {tid , status ,   completionday , comment} = req.body
+         const {tid , status , completionday , comment, empName, empEmail} = req.body
     console.log(req.body);
-     await empTask.findByIdAndUpdate(tid , {status: status
-        , completionday: completionday  , comment: comment})
+     const updatedTask = await empTask.findByIdAndUpdate(tid , {
+         status: status,
+         completionday: completionday,
+         comment: comment,
+         reportSentAt: new Date(),
+         empName: empName,
+         empEmail: empEmail
+     }, { new: true })
 
-    res.status(201).send("report send sucssefully")
+    res.status(201).send({ msg: "Report sent successfully", task: updatedTask })
     } catch (error) {
-         res.status(401).send("error in report sending")
+         console.log("error in report sending", error)
+         res.status(401).send({ msg: "error in report sending", error: error.message })
     }
-
 }
 
+// Get all notifications for an employee
+const getNotifications = async (req, res) => {
+    try {
+        const { empid } = req.params
+        
+        const notifications = await notificationModel.find({ empid: empid })
+            .sort({ createdAt: -1 })
+            .limit(50)
+
+        res.status(200).send(notifications)
+    } catch (error) {
+        console.log("Error in get notifications:", error)
+        res.status(500).send({ msg: "Error fetching notifications", error: error.message })
+    }
+}
+
+// Mark notification as read
+const markNotificationAsRead = async (req, res) => {
+    try {
+        const { notificationId } = req.params
+        
+        const notification = await notificationModel.findByIdAndUpdate(
+            notificationId,
+            { isRead: true, readAt: new Date() },
+            { new: true }
+        )
+
+        if (!notification) {
+            return res.status(404).send({ msg: "Notification not found" })
+        }
+
+        res.status(200).send({ msg: "Notification marked as read", notification: notification })
+    } catch (error) {
+        console.log("Error in mark notification as read:", error)
+        res.status(500).send({ msg: "Error updating notification", error: error.message })
+    }
+}
+
+// Get unread notification count
+const getUnreadCount = async (req, res) => {
+    try {
+        const { empid } = req.params
+        
+        const unreadCount = await notificationModel.countDocuments({
+            empid: empid,
+            isRead: false
+        })
+
+        res.status(200).send({ unreadCount: unreadCount })
+    } catch (error) {
+        console.log("Error in get unread count:", error)
+        res.status(500).send({ msg: "Error fetching unread count", error: error.message })
+    }
+}
 
 
 module.exports = {
     emptask,
     showTask,
-    sendReport
+    sendReport,
+    getNotifications,
+    markNotificationAsRead,
+    getUnreadCount
 }

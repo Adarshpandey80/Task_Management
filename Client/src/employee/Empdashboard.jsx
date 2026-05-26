@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link, Outlet } from "react-router-dom"
-import { Menu, X, CheckCircle, Clock, User } from "lucide-react"
+import { Menu, X, CheckCircle, Clock, User, Bell } from "lucide-react"
 import "../css/employee/empDashboard.css"
 
 const Empdashboard = () => {
@@ -32,6 +32,10 @@ const Empdashboard = () => {
           <Link to="pendingtasks">
             <Clock size={20} />
             <span>Pending</span>
+          </Link>
+          <Link to="notifications">
+            <Bell size={20} />
+            <span>Notifications</span>
           </Link>
           <Link to="profile">
             <User size={20} />

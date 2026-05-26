@@ -57,17 +57,22 @@ const Showtask = () => {
 
     try {
       setIsSubmitting(true)
+      const empName = localStorage.getItem('empname') || 'Employee'
+      const empEmail = localStorage.getItem('adminemail') || ''
+      
       const api = `${import.meta.env.VITE_BACKEND_URL}/employee/sendreport`
       const response = await axios.post(api, {
         tid: selectedTask._id,
         ...formInput,
+        empName: empName,
+        empEmail: empEmail,
       })
-      toast.success(response.data)
+      toast.success('Report sent successfully to admin')
       setShowModal(false)
       fetchTasks()
     } catch (error) {
       console.error('Error submitting report:', error)
-      toast.error('Failed to update task status')
+      toast.error(error.response?.data?.msg || 'Failed to send report')
     } finally {
       setIsSubmitting(false)
     }
